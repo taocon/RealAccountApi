@@ -1,11 +1,10 @@
 package com.qa.account.accountapi.rest;
 
 import com.qa.account.accountapi.persistence.domain.SentAccount;
-import com.qa.account.accountapi.persistence.domain.SentPrize;
+
 import com.qa.account.accountapi.service.AccountService;
 
 import com.qa.account.accountapi.persistence.domain.Account;
-import com.qa.account.accountapi.persistence.domain.Prize;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,66 +20,64 @@ import java.util.List;
 @RestController
 public class AccountRest {
 
-    @Autowired
-    private AccountService service;
-    
-    @Autowired
-    private RestTemplate restTemplate;
-    
-    @Autowired
-    private JmsTemplate jmsTemplate;
-    
-    @Value("${url.generator}")
-    private String generatorURL;
-    
-    @Value("${path.genAccountNum}")
-    private String accountNumGeneratorPath;
-    
-    @Value("${url.prize}")
-    private String prizeURL;
-    
-    @Value("${path.determinePrize}")
-    private String determinePrizePath;
+	@Autowired
+	private AccountService service;
 
-    @GetMapping("${path.getAccounts}")
-    public List<Account> getAccounts() {
-        return service.getAccounts();
-    }
+	@Autowired
+	private RestTemplate restTemplate;
 
-    @GetMapping("${path.getAccountById}")
-    public Account getAccount(@PathVariable Long id) {
-        return service.getAccount(id);
-    }
+	@Autowired
+	private JmsTemplate jmsTemplate;
 
-    @DeleteMapping("${path.deleteAccount}")
-    public ResponseEntity<Object> deleteAccount(@PathVariable Long id) {
-        return service.deleteAccount(id);
-    }
+	@Value("${url.generator}")
+	private String generatorURL;
 
-    @PutMapping("${path.updateAccount}")
-    public ResponseEntity<Object> updateAccount(@RequestBody Account account, @PathVariable Long id) {
-        return service.updateAccount(account, id);
-    }
-    
-    @PostMapping("${path.createAccount}")
-    public Account createAccount(@RequestBody Account account) {
-        account = setAccountNumberAndPrize(account);
-        sendToQueue(account);
-    	return service.addAccount(account);
-    }
+	@Value("${path.genAccountNum}")
+	private String accountNumGeneratorPath;
 
-    private Account setAccountNumberAndPrize(Account account){
-        String generatedAccountNum = restTemplate.getForObject(generatorURL + accountNumGeneratorPath, String.class);
-        Prize prizeWon = restTemplate.getForObject(prizeURL + determinePrizePath + generatedAccountNum, Prize.class);
+	@Value("${url.prize}")
+	private String prizeURL;
 
-        account.setAccountNumber(generatedAccountNum);
-        account.setPrize(prizeWon);
-        return account;
-    }
+	@Value("${path.determinePrize}")
+	private String determinePrizePath;
 
-    private void sendToQueue(Account account){
-        SentAccount accountToStore =  new SentAccount(account);
-        jmsTemplate.convertAndSend("AccountQueue", accountToStore);
-    }
+	@GetMapping("${path.getAccounts}")
+	public List<Account> getAccounts() {
+		return service.getAccounts();
+	}
+
+	@GetMapping("${path.getAccountById}")
+	public Account getAccount(@PathVariable Long id) {
+		return service.getAccount(id);
+	}
+
+	@DeleteMapping("${path.deleteAccount}")
+	public ResponseEntity<Object> deleteAccount(@PathVariable Long id) {
+		return service.deleteAccount(id);
+	}
+
+	@PutMapping("${path.updateAccount}")
+	public ResponseEntity<Object> updateAccount(@RequestBody Account account, @PathVariable Long id) {
+		return service.updateAccount(account, id);
+	}
+
+	@PostMapping("${path.createAccount}")
+	public Account createAccount(@RequestBody Account account) {
+		account = setAccountNumberAndPrize(account);
+		sendToQueue(account);
+		return service.addAccount(account);
+	}
+
+	private Account setAccountNumberAndPrize(Account account) {
+		String generatedAccountNum = restTemplate.getForObject(generatorURL + accountNumGeneratorPath, String.class);
+
+		account.setAccountNumber(generatedAccountNum);
+		return account;
+	}
+
+	private void sendToQueue(Account account) {
+		SentAccount accountToStore = new SentAccount(account);
+		jmsTemplate.convertAndSend("AccountQueue", accountToStore);
+	}
 
 }

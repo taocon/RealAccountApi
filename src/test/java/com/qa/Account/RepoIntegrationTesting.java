@@ -17,7 +17,6 @@ import com.qa.account.accountapi.rest.AccountRest;
 import com.qa.account.accountapi.service.AccountService;
 import com.qa.account.accountapi.util.exceptions.AccountNotFoundException;
 import com.qa.account.accountapi.persistence.domain.Account;
-import com.qa.account.accountapi.persistence.domain.Prize;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -46,7 +45,6 @@ public class RepoIntegrationTesting {
 	private static final String MOCK_PRIZE_URL = "prize URL";
 	private static final Account MOCK_BLANK_ACCOUNT = new Account();
 	private static final String MOCK_ACCOUNT_NUMBER = "B:646473";
-	private static final Prize MOCK_PRIZE = new Prize(1L, 50, "test date");
 	private static final Account MOCK_ACCOUNT = new Account(1L, "Ben", "Taylor", "A:746463");
 	private static final Account MOCK_UPDATED_ACCOUNT = new Account(1L, "Alvin", "Joseph", "B:745634"); 
 	

@@ -5,7 +5,7 @@ import static org.junit.Assert.assertEquals;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.qa.account.accountapi.persistence.domain.SentPrize;
+
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,7 +20,6 @@ import org.springframework.web.client.RestTemplate;
 import com.qa.account.accountapi.rest.AccountRest;
 import com.qa.account.accountapi.service.AccountService;
 import com.qa.account.accountapi.persistence.domain.Account;
-import com.qa.account.accountapi.persistence.domain.Prize;
 
 @RunWith(MockitoJUnitRunner.class)
 public class EndpointTests {
@@ -37,8 +36,6 @@ public class EndpointTests {
 	private static final String MOCK_ACCOUNT_NUMBER = "A:453893";
 	private static final Account MOCK_ACCOUNT_1 = new Account(1L, "Ben", "Taylor", "C:634893");
 	private static final Account MOCK_ACCOUNT_2 = new Account(2L, "Alvin", "Joseph", "B:749452");
-	private static final Prize MOCK_PRIZE = new Prize();
-	private static final SentPrize MOCK_SENT_PRIZE = new SentPrize();
 	private static final ResponseEntity<Object> MOCK_RESPONSE_ENTITY = new ResponseEntity<Object>(HttpStatus.ACCEPTED);
 	private static final String MOCK_URL = "http://mock.com";
 	
@@ -77,13 +74,11 @@ public class EndpointTests {
 	@Ignore
 	public void createAccountTest() {
 		Mockito.when(restTemp.getForObject(MOCK_URL, String.class)).thenReturn(MOCK_ACCOUNT_NUMBER);
-		Mockito.when(restTemp.getForObject(MOCK_URL, Prize.class)).thenReturn(MOCK_PRIZE);
 		Mockito.when(service.addAccount(MOCK_ACCOUNT_1)).thenReturn(MOCK_ACCOUNT_1);
-
 		assertEquals(MOCK_ACCOUNT_1, rest.createAccount(MOCK_ACCOUNT_1));
 		Mockito.verify(service).addAccount(MOCK_ACCOUNT_1);
 		Mockito.verify(restTemp).getForObject(MOCK_URL, String.class);
-		Mockito.verify(restTemp).getForObject(MOCK_URL, Prize.class);
+	
 	}
 	
 }

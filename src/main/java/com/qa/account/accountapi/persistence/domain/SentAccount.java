@@ -42,16 +42,6 @@ public class SentAccount {
         this.accountNumber = accountNumber;
     }
 
-    public SentPrize getSentPrize() {
-        return sentPrize;
-    }
-
-    public void setSentPrize(SentPrize sentPrize) {
-        this.sentPrize = sentPrize;
-    }
-
-    private SentPrize sentPrize;
-
     public SentAccount(){}
 
     public SentAccount(Account account){
@@ -59,7 +49,7 @@ public class SentAccount {
         this.firstName = account.getFirstName();
         this.lastName = account.getLastName();
         this.accountNumber = account.getAccountNumber();
-        this.sentPrize = new SentPrize(account.getPrize());
+       
     }
 
 

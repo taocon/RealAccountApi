@@ -18,8 +18,6 @@ public class Account {
 
     private String accountNumber;
     
-    @OneToOne(cascade=CascadeType.ALL)
-    private Prize prize;
 
     public Account() {
     }
@@ -61,14 +59,6 @@ public class Account {
 
     public void setAccountNumber(String accountNumber) {
         this.accountNumber = accountNumber;
-    }
-    
-    public Prize getPrize() {
-    	return prize;
-    }
-    
-    public void setPrize(Prize prize) {
-    	this.prize = prize;
     }
     
     public String toString() {
